@@ -1,0 +1,16 @@
+name: Deploy to Firebase
+on:
+  push:
+    branches: [ main ]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - run: npm install -g firebase-tools
+      - run: npm install --prefix functions
+      - run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > $HOME/service-account.json
+      - run: export GOOGLE_APPLICATION_CREDENTIALS=$HOME/service-account.json && firebase deploy --only functions --project foxcoin-d64e5
